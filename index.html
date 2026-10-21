@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mac Control Centre</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;display:grid;place-items:center;
+ font-family:Segoe UI,Arial,sans-serif;color:white;
+ background:radial-gradient(circle at top left,#37678e,#151824 60%,#402b57);
+}
+.panel{
+ width:min(360px,calc(100vw - 24px));
+ padding:18px;border-radius:26px;
+ background:rgba(30,34,45,.86);
+ border:1px solid #ffffff30;
+ box-shadow:0 20px 60px #0006;
+ backdrop-filter:blur(30px);
+}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+h2{font-size:21px;margin:0}
+.clock{font-size:12px;color:#c8ccda}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{
+ min-height:67px;padding:10px;border:1px solid #ffffff12;
+ border-radius:17px;background:#ffffff12;color:white;
+ text-align:left;cursor:pointer;display:flex;align-items:center;gap:9px
+}
+.tile.active{background:#176bd6}
+.icon{font-size:22px}
+.tile strong{display:block;font-size:13px}
+.tile small{display:block;color:#d6d9e2;margin-top:4px;font-size:11px}
+.slider{margin-top:11px;padding:12px;background:#ffffff12;border-radius:16px}
+.label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px}
+input[type=range]{width:100%;accent-color:white;cursor:pointer}
+.music{margin-top:11px;padding:12px;display:flex;align-items:center;gap:10px;background:#ffffff12;border-radius:16px}
+.album{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,#9263dd,#327fd0);font-size:23px}
+.info{flex:1;font-size:12px}
+.info small{display:block;margin-top:5px;color:#c3c8d6}
+button.control{width:32px;height:32px;border:0;border-radius:50%;background:#ffffff20;color:white;cursor:pointer}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
+.bottom button{padding:12px;border:0;border-radius:14px;background:#ffffff12;color:white;cursor:pointer}
+.bottom button:hover,.tile:hover{filter:brightness(1.2)}
+.note{text-align:center;font-size:10px;color:#aeb6c7;margin-top:12px}
+</style>
+</head>
+<body>
+<main class="panel">
+<header>
+<h2>Control Centre</h2>
+<span class="clock" id="clock"></span>
+</header>
+<div class="grid">
+<button class="tile active" onclick="toggle(this)"><span class="icon">◉</span><span><strong>Wi-Fi</strong><small>Connected</small></span></button>
+<button class="tile" onclick="toggle(this)"><span class="icon">ᛒ</span><span><strong>Bluetooth</strong><small>Off</small></span></button>
+<button class="tile" onclick="toggle(this)"><span class="icon">✈</span><span><strong>Airplane</strong><small>Off</small></span></button>
+<button class="tile" onclick="toggle(this)"><span class="icon">☾</span><span><strong>Focus</strong><small>Off</small></span></button>
+</div>
+<div class="slider">
+<div class="label"><span>☀ Brightness</span><span id="bval">80%</span></div>
+<input id="brightness" type="range" min="10" max="100" value="80" oninput="bval.textContent=this.value+'%'">
+</div>
+<div class="slider">
+<div class="label"><span>🔊 Volume</span><span id="vval">60%</span></div>
+<input id="volume" type="range" min="0" max="100" value="60" oninput="vval.textContent=this.value+'%'">
+</div>
+<div class="music">
+<div class="album">♫</div>
+<div class="info"><strong id="track">Now Playing</strong><small id="status">Music controls preview</small></div>
+<button class="control" onclick="track.textContent='Previous Track'">◀</button>
+<button class="control" id="play" onclick="playMusic()">▶</button>
+<button class="control" onclick="track.textContent='Next Track'">▶</button>
+</div>
+<div class="bottom">
+<button onclick="alert('Profile preview')">👤 Profile</button>
+<button onclick="alert('To shut down Windows, use the Start menu.')">⏻ Power</button>
+</div>
+<div class="note">Personal Control Centre · Preview</div>
+</main>
+<script>
+function toggle(button){
+ const on=button.classList.toggle('active');
+ button.querySelector('small').textContent=on?'On':'Off';
+}
+let playing=false;
+function playMusic(){
+ playing=!playing;
+ document.getElementById('play').textContent=playing?'Ⅱ':'▶';
+ document.getElementById('status').textContent=playing?'Playing preview':'Music controls preview';
+}
+function updateClock(){
+ document.getElementById('clock').textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+updateClock();setInterval(updateClock,15000);
+</script>
+</body>
+</html>
